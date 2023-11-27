@@ -8,22 +8,23 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use DB;
 
+
 class UserController extends Controller
 {
     public function login(Request $request)
     {
-        $email = $request->input('email');
-        $password = $request->input('senha');
+        $credentials = $request->only('email', 'senha');
 
-        $user = DB::table('users')->where('email', $email)->first();
+        $user = Users::where('email', $credentials['email'])->first();
+        
 
-        if ($user && password_verify($password, $user->senha)) {
+        if ($credentials['senha'] == $user->senha) {
             // Credenciais válidas
-            // Inicie manualmente uma sessão se necessário
-
-            return response()->json(['message' => 'Login successful'], 200);
+            return response()->json(['message' => 'Login bem-sucedido'], 200);
+        } else {
+            // Credenciais inválidas
+            return response()->json(['error' => 'Credenciais inválidas'], 401);
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     public function apiStore(Request $request)
