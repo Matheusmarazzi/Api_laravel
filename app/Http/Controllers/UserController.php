@@ -20,7 +20,7 @@ class UserController extends Controller
 
         if ($credentials['senha'] == $user->senha) {
             // Credenciais válidas
-            return response()->json(['message' => 'Login bem-sucedido'], 200);
+            return response()->json(['message' => 'Login bem-sucedido', 'id' => $user->id ], 200);
         } else {
             // Credenciais inválidas
             return response()->json(['error' => 'Credenciais inválidas'], 401);
